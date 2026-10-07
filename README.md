@@ -12,6 +12,8 @@ The handover documentation lives in [`docs/`](docs/):
 - [`AI_TOOLS_AND_PROCESS.md`](docs/AI_TOOLS_AND_PROCESS.md) — AI tools used and the development process.
 - [`brief_fix_quote_ia_EN.md`](docs/brief_fix_quote_ia_EN.md) — change brief (FIX), completed before implementation.
 - [`demo_brief_quote_ia_EN.md`](docs/demo_brief_quote_ia_EN.md) — product brief for the demo.
+- [`HOW_WE_SOLVED_IT.md`](docs/HOW_WE_SOLVED_IT.md) — the solution explained in plain language.
+- [`quote-flow.html`](docs/quote-flow.html) — interactive flow diagram (actors + approval gate).
 
 ## The problem (from the challenge)
 

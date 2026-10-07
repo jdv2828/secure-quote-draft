@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Secure AI Quote-Draft Flow",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "untrusted", "label": "Sales Rep · Customer · AI" },
+    { "id": "api", "label": "Laravel API" },
+    { "id": "catalog", "label": "Trusted Catalog" },
+    { "id": "approver", "label": "Human Approver" }
+  ],
+  "mainPath": ["write_note", "inject_note", "propose_draft", "receive_draft", "correct_draft", "approve"],
+  "semanticChecks": {
+    "allowedRoots": ["write_note"],
+    "allowedTerminals": ["denied"]
+  },
+  "nodes": [
+    { "id": "write_note", "lane": "untrusted", "col": 0, "type": "external", "label": "Sales note", "tag": "Sales Rep", "width": 130 },
+    { "id": "inject_note", "lane": "untrusted", "col": 1, "type": "external", "label": "Customer note", "tag": "untrusted", "width": 130 },
+    { "id": "propose_draft", "lane": "untrusted", "col": 2, "type": "external", "label": "Propose draft", "tag": "untrusted output", "width": 130 },
+    { "id": "receive_draft", "lane": "api", "col": 3, "type": "backend", "label": "Receive", "tag": "untrusted input", "width": 130 },
+    { "id": "correct_draft", "lane": "api", "col": 4, "type": "backend", "label": "Correct", "tag": "server-side", "width": 130 },
+    { "id": "catalog", "lane": "catalog", "col": 4, "type": "database", "label": "Catalog", "tag": "source of truth", "width": 130 },
+    { "id": "approve", "lane": "approver", "col": 4, "type": "security", "label": "Approve", "tag": "human gate", "width": 130 },
+    { "id": "denied", "lane": "approver", "col": 5, "type": "security", "label": "Deny", "tag": "fail-closed", "width": 130 }
+  ],
+  "edges": [
+    { "from": "write_note", "to": "inject_note", "label": "includes untrusted note", "role": "main" },
+    { "from": "inject_note", "to": "propose_draft", "label": "reads note", "role": "main" },
+    { "from": "propose_draft", "to": "receive_draft", "label": "draft (JSON)", "role": "main" },
+    { "from": "receive_draft", "to": "correct_draft", "role": "main" },
+    { "from": "correct_draft", "to": "catalog", "label": "resolve SKU + price", "role": "branch" },
+    { "from": "catalog", "to": "correct_draft", "label": "authoritative price", "role": "return", "variant": "dashed" },
+    { "from": "correct_draft", "to": "approve", "label": "draft for review", "role": "main" },
+    { "from": "approve", "to": "denied", "label": "not approver", "role": "error", "variant": "security" }
+  ]
+}
